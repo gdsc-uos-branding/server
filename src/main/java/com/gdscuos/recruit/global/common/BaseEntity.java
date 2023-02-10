@@ -14,6 +14,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class BaseEntity extends BaseTimeEntity {
 
     @LastModifiedDate
-    @Column(name = "modified_at")
+    @Column(name = "modified_at", nullable = false)
     private LocalDateTime modifiedAt;
 }
