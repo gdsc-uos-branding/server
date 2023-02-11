@@ -1,15 +1,16 @@
 package com.gdscuos.recruit.global.common;
 
+import com.gdscuos.recruit.domain.applicant.domain.Application;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,9 +27,12 @@ public class User extends BaseTimeEntity {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "team")
     private Team team;
+
+    @OneToMany(mappedBy = "user")
+    private List<Application> applications = new ArrayList<>();
 
     @Column(name = "username", nullable = false)
     private String username;
