@@ -1,6 +1,7 @@
 package com.gdscuos.recruit.global.common;
 
 import com.gdscuos.recruit.domain.applicant.domain.Application;
+import com.gdscuos.recruit.domain.critic.domain.ApplicationCritic;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -33,6 +34,9 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user")
     private List<Application> applications = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<ApplicationCritic> applicationCritics = new ArrayList<>();
 
     @Column(name = "username", nullable = false)
     private String username;
