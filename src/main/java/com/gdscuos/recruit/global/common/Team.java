@@ -1,32 +1,19 @@
 package com.gdscuos.recruit.global.common;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-@Entity
-@Table(name = "team")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Team {
+@RequiredArgsConstructor
+public enum Team {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    FRONTEND("FE", "TEAM_FRONTEND"),
+    BACKEND("BE", "TEAM_BACKEND"),
+    MOBILE("M", "TEAM_MOBILE"),
+    DATA_ML("DM", "TEAM_DATA_ML"),
+    CORE("C", "TEAM_CORE"),
+    LEAD("L", "TEAM_LEAD");
 
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @OneToMany(mappedBy = "team")
-    private List<User> users = new ArrayList<>();
+    private final String key;
+    private final String title;
 }
