@@ -7,9 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Status {
 
-    DOCUMENT("STATUS_DOCUMENT", "STATUS_DOCUMENT"),
-    INTERVIEW("STATUS_INTERVIEW", "STATUS_INTERVIEW");
+    DOCUMENT("STATUS_DOCUMENT"),
+    INTERVIEW("STATUS_INTERVIEW");
 
-    private final String key;
-    private final String title;
+    private final String value;
 }

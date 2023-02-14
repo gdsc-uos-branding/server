@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Season {
 
-    SS23("2023-S/S", "2023-S/S");
-    private final String key;
-    private final String title;
+    SS23("2023-S/S");
+    private final String value;
 }

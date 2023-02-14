@@ -7,9 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Result {
 
-    PASS("RESULT_PASS", "RESULT_PASS"),
-    FAIL("RESULT_FAIL", "RESULT_FAIL");
+    PASS("RESULT_PASS"),
+    FAIL("RESULT_FAIL");
 
-    private final String key;
-    private final String title;
+    private final String value;
 }

@@ -6,12 +6,11 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Status {
-    NONE("NONE", "NONE"),
-    COMMON("COMMON", "COMMON"),
-    TEAM("TEAM", "TEAM"),
-    CORE("CORE", "CORE"),
-    COMPLETE("COMPLETE", "COMPLETE");
+    NONE("NONE"),
+    COMMON("COMMON"),
+    TEAM("TEAM"),
+    CORE("CORE"),
+    COMPLETE("COMPLETE");
 
-    private final String key;
-    private final String title;
+    private final String value;
 }
