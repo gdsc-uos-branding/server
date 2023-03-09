@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @RestController
-public class OAuthController {
+public class AuthController {
 
     /*
         Spring Security에서 소셜 로그인 기능 제공
