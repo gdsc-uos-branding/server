@@ -2,6 +2,7 @@ package com.gdscuos.recruit.global.common;
 
 import com.gdscuos.recruit.domain.applicant.domain.Application;
 import com.gdscuos.recruit.domain.critic.domain.ApplicationCritic;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -13,14 +14,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 
 @Entity
 @Table(name = "users")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Builder
 public class User extends BaseTimeEntity {
 
     @Id
@@ -47,4 +51,11 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role;
+
+    public User update(String name, String email) {
+        this.username = name;
+        this.email = email;
+
+        return this;
+    }
 }
