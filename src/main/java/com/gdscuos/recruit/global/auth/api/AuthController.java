@@ -20,7 +20,7 @@ public class AuthController {
      */
 
     // 구글 소셜 로그인 성공시 리디렉션
-    @GetMapping("home")
+    @GetMapping("/home")
     public ResponseEntity<UserDTO> home(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) UserDTO userDTO) {
 
         // 세션을 가져와 회원을 반환합니다.
