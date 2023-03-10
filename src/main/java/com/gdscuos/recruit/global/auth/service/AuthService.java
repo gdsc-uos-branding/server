@@ -64,9 +64,8 @@ public class AuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2U
             user = entity.update(attributes.getName(), attributes.getEmail());
         } else { // 유저가 존재하지 않는 경우
             user = attributes.toEntity();
+            user.setTeam(Team.COMMON); // 회원가입 시, 팀 초기값
         }
-
-        user.setTeam(Team.COMMON); // 회원가입 시, 팀 초기값
 
         userRepository.save(user);
 

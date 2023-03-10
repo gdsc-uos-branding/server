@@ -3,10 +3,7 @@ package com.gdscuos.recruit.global.auth.api;
 import com.gdscuos.recruit.global.auth.dto.UserDTO;
 import com.gdscuos.recruit.global.util.SessionConst;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @RestController
+@RequestMapping("/api")
 public class AuthController {
 
     /*
@@ -22,7 +20,7 @@ public class AuthController {
      */
 
     // 구글 소셜 로그인 성공시 리디렉션
-    @GetMapping("/api/home")
+    @GetMapping("home")
     public ResponseEntity<UserDTO> home(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) UserDTO userDTO) {
 
         // 세션을 가져와 회원을 반환합니다.
@@ -30,7 +28,7 @@ public class AuthController {
     }
 
     // 유저가 로그인되어 있는 지 여부 확인
-    @GetMapping("/api/isLogin")
+    @GetMapping("/isLogin")
     public ResponseEntity<Boolean> currentUser(HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
@@ -41,7 +39,7 @@ public class AuthController {
     }
 
     // 로그아웃
-    @PostMapping("/api/logout")
+    @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
         if (session != null) {
