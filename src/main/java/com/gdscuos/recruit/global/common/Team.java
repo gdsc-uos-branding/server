@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Team {
 
+    COMMON("COMMON"), // 첫 회원가입 시 팀 초기값
     FRONTEND("TEAM_FRONTEND"),
     BACKEND("TEAM_BACKEND"),
     MOBILE("TEAM_MOBILE"),
