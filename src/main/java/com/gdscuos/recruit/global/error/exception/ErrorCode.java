@@ -27,9 +27,13 @@ public enum ErrorCode {
             HttpStatus.UNAUTHORIZED.value()),
     REFRESH_TOKEN_EXPIRED("AT05", "Refreshed Token is Expired.", HttpStatus.UNAUTHORIZED.value()),
 
-    // external API
+    // External API
     EXTERNAL_API_FAILED("E01", "External API Request is failed.",
-            HttpStatus.INTERNAL_SERVER_ERROR.value());;
+            HttpStatus.INTERNAL_SERVER_ERROR.value()),
+
+    // Auth
+    OAUTH2_AUTHENTICATION_FAILED("G01", "Google OAuth2 Authentication is failed",
+            HttpStatus.INTERNAL_SERVER_ERROR.value());
 
     private final String code;
     private final String message;

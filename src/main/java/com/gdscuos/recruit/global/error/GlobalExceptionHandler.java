@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -57,6 +58,15 @@ public class GlobalExceptionHandler {
             final HttpMessageNotReadableException exception) {
         log.error("handleHttpMessageNotReadableException", exception);
         final ErrorCode errorCode = ErrorCode.INVALID_INPUT_VALUE;
+        ErrorResponse response = ErrorResponse.from(errorCode);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
+    }
+
+    @ExceptionHandler(OAuth2AuthenticationException.class)
+    protected ResponseEntity<ErrorResponse> handleOAuth2AuthenticationException(
+            final OAuth2AuthenticationException exception) {
+        log.error("handleOAuth2AuthenticationException", exception);
+        final ErrorCode errorCode = ErrorCode.OAUTH2_AUTHENTICATION_FAILED;
         ErrorResponse response = ErrorResponse.from(errorCode);
         return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
     }
