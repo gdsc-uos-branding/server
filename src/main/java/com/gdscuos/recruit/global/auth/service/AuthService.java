@@ -23,6 +23,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -55,10 +56,17 @@ public class AuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2U
 
     // 로그인 진행 시, db 저장 혹은 갱신
     private User saveOrUpdate(OAuthAttributes attributes) {
-        User user = userRepository.findUserByEmail(attributes.getEmail()).map(entity -> entity.update(attributes.getName(), attributes.getEmail()))
-                .orElse(attributes.toEntity());
+        Optional<User> optionalUser = userRepository.findUserByEmail(attributes.getEmail());
+        User user;
 
-        user.setTeam(Team.COMMON);
+        if (optionalUser.isPresent()) { // 유저가 이미 존재하는 경우
+            User entity = optionalUser.get();
+            user = entity.update(attributes.getName(), attributes.getEmail());
+        } else { // 유저가 존재하지 않는 경우
+            user = attributes.toEntity();
+        }
+
+        user.setTeam(Team.COMMON); // 회원가입 시, 팀 초기값
 
         userRepository.save(user);
 
