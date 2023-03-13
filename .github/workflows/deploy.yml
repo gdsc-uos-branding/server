@@ -40,7 +40,7 @@ jobs:
         run: |
           cd ./src/main/resources
           touch ./application.yml
-          echo "${{ secrets.PROPERTIES }}" > ./application.yml
+          echo "${{ secrets.PROD_PROPERTIES }}" > ./application.yml
         shell: bash
 
       ## gradle build
