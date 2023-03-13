@@ -36,12 +36,12 @@ jobs:
             ${{ runner.os }}-gradle-
 
       ## create application.yml
-      - name: make application.yml
+      - name: Create application.yml
+        env:
+          PROPERTIES: ${{ secrets.PROD_PROPERTIES }}
         run: |
-          cd ./src/main/resources
-          touch ./application.yml
-          echo "${{ secrets.PROD_PROPERTIES }}" > ./application.yml
-        shell: bash
+          mkdir -p ./src/main/resources
+          echo "${{ env.PROPERTIES }}" > ./src/main/resources/application.yml
 
       ## gradle build
       - name: Build with Gradle
