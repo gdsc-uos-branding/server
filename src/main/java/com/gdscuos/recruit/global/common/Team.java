@@ -12,6 +12,7 @@ public enum Team {
     BACKEND("TEAM_BACKEND"),
     MOBILE("TEAM_MOBILE"),
     DATA_ML("TEAM_DATA_ML"),
+    DESIGN("TEAM_DESIGN"),
     CORE("TEAM_CORE"),
     LEAD("TEAM_LEAD");
 
