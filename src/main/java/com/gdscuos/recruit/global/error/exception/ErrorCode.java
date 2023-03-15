@@ -27,6 +27,10 @@ public enum ErrorCode {
             HttpStatus.UNAUTHORIZED.value()),
     REFRESH_TOKEN_EXPIRED("AT05", "Refreshed Token is Expired.", HttpStatus.UNAUTHORIZED.value()),
 
+    // Introduction API
+
+    INTRODUCTION_NOT_FOUND("I01", "Introduction is not Found.", HttpStatus.BAD_REQUEST.value()),
+
     // External API
     EXTERNAL_API_FAILED("E01", "External API Request is failed.",
             HttpStatus.INTERNAL_SERVER_ERROR.value()),
