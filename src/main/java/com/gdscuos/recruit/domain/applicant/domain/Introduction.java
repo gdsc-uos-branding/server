@@ -1,4 +1,4 @@
-package com.gdscuos.recruit.domain.critic.domain;
+package com.gdscuos.recruit.domain.applicant.domain;
 
 import com.gdscuos.recruit.global.common.Team;
 import javax.persistence.Column;
@@ -18,14 +18,13 @@ import lombok.NoArgsConstructor;
 @Table(name = "introduction")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Introduction {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "team", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Team team;
 
     @Column(name = "about")
@@ -36,4 +35,5 @@ public class Introduction {
 
     @Column(name = "target")
     private String target;
+
 }
