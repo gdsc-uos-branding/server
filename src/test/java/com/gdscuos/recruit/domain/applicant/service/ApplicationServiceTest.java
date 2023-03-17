@@ -3,6 +3,7 @@ package com.gdscuos.recruit.domain.applicant.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.gdscuos.recruit.domain.applicant.dto.ApplicationGetResponse;
 import com.gdscuos.recruit.domain.applicant.dto.ApplicationTeamQuestionGetResponse;
 import com.gdscuos.recruit.domain.applicant.exception.ApplicationQuestionNotFoundException;
 import com.gdscuos.recruit.global.common.Team;
@@ -43,6 +44,19 @@ class ApplicationServiceTest {
         //when & then
         assertThatThrownBy(() -> applicationService.getTeamQuestion(backend))
                 .isInstanceOf(ApplicationQuestionNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("Applcation을 정상적으로 조회할 수 있다.")
+    void getApplication() {
+        //given
+        String userEmail = "test@gmail.com";
+
+        //when
+        ApplicationGetResponse application = applicationService.getApplication(userEmail);
+
+        //then
+        assertThat(application.getQuestionAnswerList().size()).isEqualTo(2);
     }
 
 
