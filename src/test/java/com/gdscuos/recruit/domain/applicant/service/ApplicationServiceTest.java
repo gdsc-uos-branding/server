@@ -38,7 +38,7 @@ class ApplicationServiceTest {
     @DisplayName("Question이 등록되지 않은 Team에 대해 조회을 요청할 시에 Exception을 발생시킨다")
     void getQuestionUnregisteredTeam() {
         //given
-        Team backend = Team.BACKEND;
+        Team backend = Team.FRONTEND;
 
         //when & then
         assertThatThrownBy(() -> applicationService.getTeamQuestion(backend))
