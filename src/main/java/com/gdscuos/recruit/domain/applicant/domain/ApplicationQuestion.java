@@ -1,7 +1,10 @@
 package com.gdscuos.recruit.domain.applicant.domain;
 
+import com.gdscuos.recruit.global.common.Team;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,6 +30,10 @@ public class ApplicationQuestion {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id")
     private Application application;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "team", nullable = false)
+    private Team team;
 
     @Column(name = "question", nullable = false)
     private String question;
