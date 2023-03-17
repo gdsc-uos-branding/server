@@ -22,7 +22,7 @@ public class ApplicationTeamQuestionFindDao {
         try {
             return queryFactory.selectFrom(application)
                     .leftJoin(application.applicationQuestions, applicationQuestion).fetchJoin()
-                    .where(application.user.id.eq(5L), application.team.eq(team))
+                    .where(application.user.id.eq(5L), applicationQuestion.team.eq(team))
                     .orderBy(application.id.asc())
                     .fetchFirst()
                     .getApplicationQuestions();
