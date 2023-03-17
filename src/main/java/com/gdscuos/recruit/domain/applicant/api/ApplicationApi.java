@@ -36,7 +36,9 @@ public class ApplicationApi {
     public ResponseEntity<ApplicationGetResponse> getApplication(
             @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) UserDTO userDTO
     ) {
-        userDTO.getUserId();
+        ApplicationGetResponse application = applicationService.getApplication(userDTO.getEmail());
+
+        return ResponseEntity.ok(application);
     }
 //
 //    @PostMapping("")
