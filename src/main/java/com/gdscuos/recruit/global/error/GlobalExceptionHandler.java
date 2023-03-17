@@ -1,5 +1,6 @@
 package com.gdscuos.recruit.global.error;
 
+import com.gdscuos.recruit.global.error.exception.AccessDeniedException;
 import com.gdscuos.recruit.global.error.exception.BusinessException;
 import com.gdscuos.recruit.global.error.exception.EntityNotFoundException;
 import com.gdscuos.recruit.global.error.exception.ErrorCode;
@@ -16,6 +17,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(AccessDeniedException.class)
+    protected ResponseEntity<ErrorResponse> handleAccessDeniedException(
+            final AccessDeniedException exception) {
+        log.error("handleAccessDeniedException", exception);
+        final ErrorCode errorCode = exception.getErrorCode();
+        final ErrorResponse response = ErrorResponse.from(errorCode);
+        return new ResponseEntity<>(response, HttpStatus.valueOf(errorCode.getStatus()));
+    }
 
     @ExceptionHandler(BusinessException.class)
     protected ResponseEntity<ErrorResponse> handleBusinessException(
