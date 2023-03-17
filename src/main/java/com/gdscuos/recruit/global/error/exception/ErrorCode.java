@@ -31,8 +31,9 @@ public enum ErrorCode {
     INTRODUCTION_NOT_FOUND("I01", "Introduction is not Found.", HttpStatus.BAD_REQUEST.value()),
 
     // Application
-    Application_Question_NOT_FOUND("A01", "Application Question is not Found.",
+    APPLICATION_QUESTION_NOT_FOUND("A01", "Application Question is not Found.",
             HttpStatus.BAD_REQUEST.value()),
+    APPLICATION_NOT_FOUND("A02", "Application is not Found.", HttpStatus.BAD_REQUEST.value()),
 
     // External API
     EXTERNAL_API_FAILED("E01", "External API Request is failed.",
