@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ApplicationQuestionAnswer {
 
+    private Long id;
+
     private Team questionTeam;
     private String question;
     private String answer;
@@ -16,6 +18,7 @@ public class ApplicationQuestionAnswer {
     private Integer maxLength;
 
     public ApplicationQuestionAnswer(ApplicationQuestion applicationQuestion) {
+        this.id = applicationQuestion.getId();
         this.questionTeam = applicationQuestion.getTeam();
         this.question = applicationQuestion.getQuestion();
         this.answer = applicationQuestion.getAnswer();
