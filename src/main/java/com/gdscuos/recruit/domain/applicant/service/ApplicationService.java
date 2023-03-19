@@ -1,20 +1,28 @@
 package com.gdscuos.recruit.domain.applicant.service;
 
+import com.gdscuos.recruit.domain.applicant.dao.ApplicationDefaultQuestionFindDao;
 import com.gdscuos.recruit.domain.applicant.dao.ApplicationQuestionFindDao;
+import com.gdscuos.recruit.domain.applicant.dao.ApplicationQuestionUpdateDao;
 import com.gdscuos.recruit.domain.applicant.dao.ApplicationTeamQuestionFindDao;
+import com.gdscuos.recruit.domain.applicant.dao.ApplicationUpdateDao;
 import com.gdscuos.recruit.domain.applicant.domain.Application;
 import com.gdscuos.recruit.domain.applicant.domain.ApplicationQuestion;
+import com.gdscuos.recruit.domain.applicant.domain.Season;
+import com.gdscuos.recruit.domain.applicant.domain.Status;
 import com.gdscuos.recruit.domain.applicant.dto.ApplicationGetResponse;
 import com.gdscuos.recruit.domain.applicant.dto.ApplicationQuestionAnswer;
+import com.gdscuos.recruit.domain.applicant.dto.ApplicationSubmitRequest;
 import com.gdscuos.recruit.domain.applicant.dto.ApplicationTeamQuestionGetResponse;
 import com.gdscuos.recruit.domain.applicant.exception.ApplicationNotFoundException;
 import com.gdscuos.recruit.domain.applicant.exception.ApplicationQuestionNotFoundException;
 import com.gdscuos.recruit.domain.applicant.exception.UserNotFoundException;
+import com.gdscuos.recruit.domain.applicant.repository.ApplicationQuestionRepository;
 import com.gdscuos.recruit.domain.applicant.repository.ApplicationRepository;
 import com.gdscuos.recruit.global.auth.repository.UserRepository;
 import com.gdscuos.recruit.global.common.Team;
 import com.gdscuos.recruit.global.common.User;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +37,10 @@ public class ApplicationService {
     private final UserRepository userRepository;
     private final ApplicationTeamQuestionFindDao teamQuestionFindDao;
     private final ApplicationQuestionFindDao applicationQuestionFindDao;
+    private final ApplicationQuestionUpdateDao applicationQuestionUpdateDao;
+    private final ApplicationQuestionRepository applicationQuestionRepository;
+    private final ApplicationDefaultQuestionFindDao applicationDefaultQuestionFindDao;
+    private final ApplicationUpdateDao applicationUpdateDao;
 
     public List<ApplicationTeamQuestionGetResponse> getTeamQuestion(Team team) {
         List<ApplicationQuestion> applicationQuestionList = teamQuestionFindDao.getApplicationQuestion(
@@ -44,30 +56,90 @@ public class ApplicationService {
                 .collect(Collectors.toList());
     }
 
-    public ApplicationGetResponse getApplication(String userEmail) {
+    @Transactional
+    public ApplicationGetResponse getApplication(String userEmail, Season season) {
         User user = userRepository.findUserByEmail(userEmail)
                 .orElseThrow(UserNotFoundException::new);
 
-        Application application = applicationRepository.findByUser(user)
+        Optional<Application> optionalApplication = applicationRepository.findByUserAndSeason(user,
+                season);
+
+        if (optionalApplication.isPresent()) {
+            //application exist
+            Application application = optionalApplication.get();
+            List<ApplicationQuestion> applicationQuestion = applicationQuestionFindDao.getApplicationQuestion(
+                    application);
+
+            if (applicationQuestion == null) {
+                throw new ApplicationQuestionNotFoundException();
+            }
+
+            List<ApplicationQuestionAnswer> applicationQuestionAnswers = applicationQuestion.stream()
+                    .map(ApplicationQuestionAnswer::new).collect(Collectors.toList());
+
+            return ApplicationGetResponse.builder()
+                    .team(application.getTeam())
+                    .season(application.getSeason())
+                    .status(application.getStatus())
+                    .isApplyCore(application.getIsApplyCore())
+                    .questionAnswerList(applicationQuestionAnswers)
+                    .build();
+        } else {
+            //application create
+            Application createdApplication = Application.builder()
+                    .user(user)
+                    .team(Team.COMMON) //initial state
+                    .season(season)
+                    .status(Status.NONE)
+                    .isApplyCore(false)
+                    .build();
+
+            applicationRepository.save(createdApplication);
+
+            List<ApplicationQuestion> copiedQuestions = applicationDefaultQuestionFindDao
+                    .findDefaultAllQuestion(5L, season)
+                    .stream()
+                    .map(defaultQuestion -> ApplicationQuestion.builder()
+                            .application(createdApplication)
+                            .team(defaultQuestion.getTeam())
+                            .question(defaultQuestion.getQuestion())
+                            .answer("")
+                            .maxLength(defaultQuestion.getMaxLength())
+                            .required(defaultQuestion.getRequired())
+                            .build())
+                    .collect(Collectors.toList());
+
+            applicationQuestionRepository.saveAll(copiedQuestions);
+
+            List<ApplicationQuestionAnswer> defaultApplicationQuestionAnswers = copiedQuestions
+                    .stream()
+                    .map(ApplicationQuestionAnswer::new).collect(Collectors.toList());
+
+            return ApplicationGetResponse.builder()
+                    .team(createdApplication.getTeam())
+                    .season(createdApplication.getSeason())
+                    .status(createdApplication.getStatus())
+                    .isApplyCore(createdApplication.getIsApplyCore())
+                    .questionAnswerList(defaultApplicationQuestionAnswers)
+                    .build();
+        }
+    }
+
+    @Transactional
+    public void submitApplication(String userEmail, Season season,
+            ApplicationSubmitRequest applicationSubmitRequest) {
+        User user = userRepository.findUserByEmail(userEmail)
+                .orElseThrow(UserNotFoundException::new);
+
+        Application application = applicationRepository.findByUserAndSeason(user, season)
                 .orElseThrow(ApplicationNotFoundException::new);
 
-        List<ApplicationQuestion> applicationQuestion = applicationQuestionFindDao.getApplicationQuestion(
-                application);
+        List<ApplicationQuestion> applicationQuestions = applicationSubmitRequest.getQuestionAnswerList();
 
-        if (applicationQuestion == null) {
-            throw new ApplicationQuestionNotFoundException();
-        }
+        applicationUpdateDao.updateApplication(application, applicationSubmitRequest);
 
-        List<ApplicationQuestionAnswer> applicationQuestionAnswers = applicationQuestion.stream()
-                .map(ApplicationQuestionAnswer::new).collect(Collectors.toList());
-
-        return ApplicationGetResponse.builder()
-                .team(application.getTeam())
-                .season(application.getSeason())
-                .status(application.getStatus())
-                .isApplyCore(application.getIsApplyCore())
-                .questionAnswerList(applicationQuestionAnswers)
-                .build();
+        applicationQuestionUpdateDao.updateApplicationQuestion(application,
+                applicationQuestions);
     }
 
 }
