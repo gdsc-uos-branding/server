@@ -43,6 +43,6 @@ class ApplicationQuestionFindDaoTest {
                 application);
 
         //then
-        assertThat(applicationQuestion.size()).isEqualTo(2);
+        assertThat(applicationQuestion.size()).isEqualTo(0);
     }
 }

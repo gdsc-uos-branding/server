@@ -1,6 +1,7 @@
 package com.gdscuos.recruit.domain.applicant.repository;
 
 import com.gdscuos.recruit.domain.applicant.domain.Application;
+import com.gdscuos.recruit.domain.applicant.domain.Season;
 import com.gdscuos.recruit.domain.applicant.exception.ApplicationNotFoundException;
 import com.gdscuos.recruit.domain.applicant.exception.UserNotFoundException;
 import com.gdscuos.recruit.global.auth.repository.UserRepository;
@@ -35,4 +36,18 @@ class ApplicationRepositoryTest {
         //then
         Assertions.assertThat(application.getTeam()).isEqualTo(Team.FRONTEND);
     }
+
+    @Test
+    @DisplayName("User, Season 통해 지원서를 조회할 수 있다.")
+    void getApplicationByUserAndSeason() {
+        //given
+        User user = userRepository.findUserByEmail("test@gmail.com")
+                .orElseThrow(UserNotFoundException::new);
+        //when
+        Application application = applicationRepository.findByUserAndSeason(user, Season.SS23)
+                .orElseThrow(ApplicationNotFoundException::new);
+        //then
+        Assertions.assertThat(application.getTeam()).isEqualTo(Team.FRONTEND);
+    }
+
 }
