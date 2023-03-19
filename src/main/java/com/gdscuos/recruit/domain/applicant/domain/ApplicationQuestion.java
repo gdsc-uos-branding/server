@@ -13,8 +13,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -38,6 +40,7 @@ public class ApplicationQuestion {
     @Column(name = "question", nullable = false)
     private String question;
 
+    @Setter
     @Column(name = "answer")
     private String answer;
 
@@ -46,4 +49,16 @@ public class ApplicationQuestion {
 
     @Column(name = "max_length", nullable = false)
     private Integer maxLength;
+
+    @Builder
+    public ApplicationQuestion(Application application, Team team, String question,
+            String answer,
+            Boolean required, Integer maxLength) {
+        this.application = application;
+        this.team = team;
+        this.question = question;
+        this.answer = answer;
+        this.required = required;
+        this.maxLength = maxLength;
+    }
 }
