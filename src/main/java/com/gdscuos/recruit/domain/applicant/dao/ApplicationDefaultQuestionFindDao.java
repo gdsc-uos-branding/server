@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 지원자의 지원서를 초기 생성하기 위해 해당 시즌의 모든 질문을 가져오는 DAO
+ * <p>
+ * Storage Id는 해당 시즌의 모든 질문을 보유하는 계정의 Id를 사용할 것
  */
 @Service
 @Transactional

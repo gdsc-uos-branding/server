@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 각 팀별 지원서 문항 조회 DAO
+ * <p>
+ * Storage Id는 해당 시즌의 모든 질문을 보유하는 계정의 Id를 사용할 것
  */
 @Service
 @Transactional
