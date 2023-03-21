@@ -16,7 +16,7 @@ public enum ErrorCode {
     // User
     USER_ACCESS_DENIED("U01", "User Access is Denied.", HttpStatus.UNAUTHORIZED.value()),
     USER_NOT_FOUND("U02", "User is not Found.", HttpStatus.BAD_REQUEST.value()),
-    EMAIL_DUPLICATION("U03", "Email is Duplicated.", HttpStatus.BAD_REQUEST.value()),
+    EMAIL_DUPLICATION("U03", "User Email is Duplicated.", HttpStatus.BAD_REQUEST.value()),
 
     // User - Token
     ACCESS_TOKEN_EXPIRED("AT01", "Access Token is Expired", HttpStatus.UNAUTHORIZED.value()),

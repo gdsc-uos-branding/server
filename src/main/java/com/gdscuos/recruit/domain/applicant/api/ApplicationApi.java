@@ -41,7 +41,8 @@ public class ApplicationApi {
     @GetMapping("/{season}")
     public ResponseEntity<ApplicationGetResponse> getApplication(
             @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) UserDTO userDTO,
-            @PathVariable Season season) {
+            @PathVariable Season season
+    ) {
         ApplicationGetResponse application = applicationService.getApplication(userDTO.getEmail(),
                 season);
 
@@ -57,6 +58,6 @@ public class ApplicationApi {
     ) {
         applicationService.submitApplication(userDTO.getEmail(), season, applicationSubmitRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("");
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 지원서 정보 업데이트 DAO
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor

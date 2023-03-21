@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 각 팀별 지원서 문항 조회 DAO
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor

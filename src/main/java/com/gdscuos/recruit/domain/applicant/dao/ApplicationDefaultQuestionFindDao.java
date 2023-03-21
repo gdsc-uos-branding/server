@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 지원자의 지원서를 초기 생성하기 위해 해당 시즌의 모든 질문을 가져오는 DAO
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
