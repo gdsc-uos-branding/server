@@ -23,7 +23,7 @@ class ApplicationDefaultQuestionFindDaoTest {
     void getDefaultQuestion() {
         //given & when
         List<ApplicationQuestion> defaultAllQuestion = applicationDefaultQuestionFindDao.findDefaultAllQuestion(
-                5L, Season.SS23);
+                Season.SS23);
         //then
         assertThat(defaultAllQuestion.size()).isEqualTo(11);
     }

@@ -97,7 +97,7 @@ public class ApplicationService {
             applicationRepository.save(createdApplication);
 
             List<ApplicationQuestion> copiedQuestions = applicationDefaultQuestionFindDao
-                    .findDefaultAllQuestion(5L, season)
+                    .findDefaultAllQuestion(season)
                     .stream()
                     .map(defaultQuestion -> ApplicationQuestion.builder()
                             .application(createdApplication)

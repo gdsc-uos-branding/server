@@ -20,12 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class ApplicationTeamQuestionFindDao {
 
     private final JPAQueryFactory queryFactory;
+    private final Long StorageId = 5L;
 
     public List<ApplicationQuestion> getApplicationQuestion(Team team) {
         try {
             return queryFactory.selectFrom(application)
                     .leftJoin(application.applicationQuestions, applicationQuestion).fetchJoin()
-                    .where(application.user.id.eq(5L), applicationQuestion.team.eq(team))
+                    .where(application.user.id.eq(StorageId), applicationQuestion.team.eq(team))
                     .orderBy(application.id.asc())
                     .fetchFirst()
                     .getApplicationQuestions();

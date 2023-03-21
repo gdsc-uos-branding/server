@@ -20,12 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class ApplicationDefaultQuestionFindDao {
 
     private final JPAQueryFactory queryFactory;
+    private final Long StorageId = 5L;
 
-    public List<ApplicationQuestion> findDefaultAllQuestion(Long userId, Season season) {
+    public List<ApplicationQuestion> findDefaultAllQuestion(Season season) {
         return queryFactory
                 .selectFrom(applicationQuestion)
                 .innerJoin(applicationQuestion.application, application)
-                .where(application.user.id.eq(userId)
+                .where(application.user.id.eq(StorageId)
                         .and(application.season.eq(season)))
                 .fetch();
     }
