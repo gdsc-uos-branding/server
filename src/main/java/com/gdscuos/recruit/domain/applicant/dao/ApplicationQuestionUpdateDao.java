@@ -1,0 +1,42 @@
+package com.gdscuos.recruit.domain.applicant.dao;
+
+import static com.gdscuos.recruit.domain.applicant.domain.QApplicationQuestion.applicationQuestion;
+
+import com.gdscuos.recruit.domain.applicant.domain.Application;
+import com.gdscuos.recruit.domain.applicant.domain.ApplicationQuestion;
+import com.gdscuos.recruit.domain.applicant.exception.ApplicationQuestionNotFoundException;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * 지원서 질문 답변 수정하여 업데이트 DAO
+ */
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class ApplicationQuestionUpdateDao {
+
+    private final JPAQueryFactory queryFactory;
+
+    public void updateApplicationQuestion(Application application,
+            List<ApplicationQuestion> applicationQuestions) {
+        for (ApplicationQuestion newApplicationQuestion : applicationQuestions) {
+            if (newApplicationQuestion.getId() == null
+            ) {
+                throw new ApplicationQuestionNotFoundException();
+            }
+
+            long updateCnt = queryFactory.update(applicationQuestion)
+                    .where(applicationQuestion.id.eq(newApplicationQuestion.getId()))
+                    .set(applicationQuestion.answer, newApplicationQuestion.getAnswer())
+                    .execute();
+
+            if (updateCnt != 1) {
+                throw new ApplicationQuestionNotFoundException();
+            }
+        }
+    }
+}
