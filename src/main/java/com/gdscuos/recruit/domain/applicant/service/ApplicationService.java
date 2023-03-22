@@ -24,6 +24,7 @@ import com.gdscuos.recruit.global.common.User;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,7 +64,8 @@ public class ApplicationService {
         Application application = getOrCreateApplication(user, season);
 
         List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findByApplication(
-                application).orElseThrow(ApplicationQuestionNotFoundException::new);
+                        application, Sort.by("id").ascending())
+                .orElseThrow(ApplicationQuestionNotFoundException::new);
 
         List<ApplicationQuestionAnswer> applicationQuestionAnswers = applicationQuestions.stream()
                 .map(ApplicationQuestionAnswer::new)
