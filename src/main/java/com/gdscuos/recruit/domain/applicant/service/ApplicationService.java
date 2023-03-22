@@ -22,7 +22,6 @@ import com.gdscuos.recruit.global.auth.repository.UserRepository;
 import com.gdscuos.recruit.global.common.Team;
 import com.gdscuos.recruit.global.common.User;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,68 +60,54 @@ public class ApplicationService {
         User user = userRepository.findUserByEmail(userEmail)
                 .orElseThrow(UserNotFoundException::new);
 
-        Optional<Application> optionalApplication = applicationRepository.findByUserAndSeason(user,
-                season);
+        Application application = getOrCreateApplication(user, season);
 
-        if (optionalApplication.isPresent()) {
-            //application exist
-            Application application = optionalApplication.get();
-            List<ApplicationQuestion> applicationQuestion = applicationQuestionFindDao.getApplicationQuestion(
-                    application);
+        List<ApplicationQuestion> applicationQuestions = applicationQuestionRepository.findByApplication(
+                application).orElseThrow(ApplicationQuestionNotFoundException::new);
 
-            if (applicationQuestion == null) {
-                throw new ApplicationQuestionNotFoundException();
-            }
+        List<ApplicationQuestionAnswer> applicationQuestionAnswers = applicationQuestions.stream()
+                .map(ApplicationQuestionAnswer::new)
+                .collect(Collectors.toList());
 
-            List<ApplicationQuestionAnswer> applicationQuestionAnswers = applicationQuestion.stream()
-                    .map(ApplicationQuestionAnswer::new).collect(Collectors.toList());
+        return ApplicationGetResponse.builder()
+                .team(application.getTeam())
+                .season(application.getSeason())
+                .status(application.getStatus())
+                .isApplyCore(application.getIsApplyCore())
+                .questionAnswerList(applicationQuestionAnswers)
+                .build();
+    }
 
-            return ApplicationGetResponse.builder()
-                    .team(application.getTeam())
-                    .season(application.getSeason())
-                    .status(application.getStatus())
-                    .isApplyCore(application.getIsApplyCore())
-                    .questionAnswerList(applicationQuestionAnswers)
-                    .build();
-        } else {
-            //application create
-            Application createdApplication = Application.builder()
-                    .user(user)
-                    .team(Team.COMMON) //initial state
-                    .season(season)
-                    .status(Status.NONE)
-                    .isApplyCore(false)
-                    .build();
+    private Application getOrCreateApplication(User user, Season season) {
+        return applicationRepository.findByUserAndSeason(user, season)
+                .orElseGet(() -> createDefaultApplication(user, season));
+    }
 
-            applicationRepository.save(createdApplication);
+    private Application createDefaultApplication(User user, Season season) {
+        Application application = Application.builder()
+                .user(user)
+                .team(Team.COMMON)
+                .season(season)
+                .status(Status.NONE)
+                .isApplyCore(false)
+                .build();
 
-            List<ApplicationQuestion> copiedQuestions = applicationDefaultQuestionFindDao
-                    .findDefaultAllQuestion(season)
-                    .stream()
-                    .map(defaultQuestion -> ApplicationQuestion.builder()
-                            .application(createdApplication)
-                            .team(defaultQuestion.getTeam())
-                            .question(defaultQuestion.getQuestion())
-                            .answer("")
-                            .maxLength(defaultQuestion.getMaxLength())
-                            .required(defaultQuestion.getRequired())
-                            .build())
-                    .collect(Collectors.toList());
+        List<ApplicationQuestion> defaultQuestions = applicationDefaultQuestionFindDao
+                .findDefaultAllQuestion(season)
+                .stream()
+                .map(defaultQuestion -> ApplicationQuestion.builder()
+                        .application(application)
+                        .team(defaultQuestion.getTeam())
+                        .question(defaultQuestion.getQuestion())
+                        .answer("")
+                        .maxLength(defaultQuestion.getMaxLength())
+                        .required(defaultQuestion.getRequired())
+                        .build())
+                .collect(Collectors.toList());
 
-            applicationQuestionRepository.saveAll(copiedQuestions);
+        applicationQuestionRepository.saveAll(defaultQuestions);
 
-            List<ApplicationQuestionAnswer> defaultApplicationQuestionAnswers = copiedQuestions
-                    .stream()
-                    .map(ApplicationQuestionAnswer::new).collect(Collectors.toList());
-
-            return ApplicationGetResponse.builder()
-                    .team(createdApplication.getTeam())
-                    .season(createdApplication.getSeason())
-                    .status(createdApplication.getStatus())
-                    .isApplyCore(createdApplication.getIsApplyCore())
-                    .questionAnswerList(defaultApplicationQuestionAnswers)
-                    .build();
-        }
+        return applicationRepository.save(application);
     }
 
     @Transactional
