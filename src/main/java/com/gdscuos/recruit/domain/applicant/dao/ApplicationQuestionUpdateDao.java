@@ -4,6 +4,7 @@ import static com.gdscuos.recruit.domain.applicant.domain.QApplicationQuestion.a
 
 import com.gdscuos.recruit.domain.applicant.domain.Application;
 import com.gdscuos.recruit.domain.applicant.domain.ApplicationQuestion;
+import com.gdscuos.recruit.domain.applicant.exception.ApplicationQuestionNotFoundException;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +24,19 @@ public class ApplicationQuestionUpdateDao {
     public void updateApplicationQuestion(Application application,
             List<ApplicationQuestion> applicationQuestions) {
         for (ApplicationQuestion newApplicationQuestion : applicationQuestions) {
-            queryFactory.update(applicationQuestion)
+            if (newApplicationQuestion.getId() == null
+            ) {
+                throw new ApplicationQuestionNotFoundException();
+            }
+
+            long updateCnt = queryFactory.update(applicationQuestion)
                     .where(applicationQuestion.id.eq(newApplicationQuestion.getId()))
                     .set(applicationQuestion.answer, newApplicationQuestion.getAnswer())
                     .execute();
+
+            if (updateCnt != 1) {
+                throw new ApplicationQuestionNotFoundException();
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ import com.gdscuos.recruit.domain.applicant.domain.Application;
 import com.gdscuos.recruit.domain.applicant.domain.ApplicationQuestion;
 import com.gdscuos.recruit.domain.applicant.domain.Season;
 import com.gdscuos.recruit.domain.applicant.exception.ApplicationNotFoundException;
+import com.gdscuos.recruit.domain.applicant.exception.ApplicationQuestionNotFoundException;
 import com.gdscuos.recruit.domain.applicant.exception.UserNotFoundException;
 import com.gdscuos.recruit.domain.applicant.repository.ApplicationQuestionRepository;
 import com.gdscuos.recruit.domain.applicant.repository.ApplicationRepository;
@@ -13,6 +14,7 @@ import com.gdscuos.recruit.global.auth.repository.UserRepository;
 import com.gdscuos.recruit.global.common.Team;
 import com.gdscuos.recruit.global.common.User;
 import java.util.Arrays;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,4 +70,51 @@ class ApplicationQuestionUpdateDaoTest {
         assertThat(updatedQuestion).isNotNull();
         assertThat(updatedQuestion.getAnswer()).isEqualTo("it's test");
     }
+
+    @Test
+    @Transactional
+    @DisplayName("지원서에 부적절한 질문이 있을 시 예외를 던지고 롤백한다.")
+    void throwExceptionWhenQuestionIsNotInApplication() {
+        //given
+        User user = userRepository.findUserByEmail("test@gmail.com")
+                .orElseThrow(UserNotFoundException::new);
+
+        Application application = applicationRepository.findByUserAndSeason(user, Season.SS23)
+                .orElseThrow(
+                        ApplicationNotFoundException::new);
+
+        ApplicationQuestion savedQuestion = applicationQuestionRepository.save(
+                ApplicationQuestion.builder()
+                        .application(application)
+                        .question("test1")
+                        .answer("")
+                        .maxLength(100)
+                        .required(true)
+                        .team(Team.COMMON)
+                        .build()
+        );
+        ApplicationQuestion unSavedQuestion = ApplicationQuestion.builder()
+                .application(application)
+                .question("test2")
+                .answer("")
+                .maxLength(100)
+                .required(true)
+                .team(Team.COMMON)
+                .build();
+
+        //when
+        savedQuestion.setAnswer("it's test");
+        unSavedQuestion.setAnswer("it's exception test");
+
+        //then
+        Assertions.assertThatThrownBy(
+                        () -> applicationQuestionUpdateDao.updateApplicationQuestion(application,
+                                Arrays.asList(savedQuestion, unSavedQuestion)))
+                .isInstanceOf(ApplicationQuestionNotFoundException.class);
+
+        ApplicationQuestion updatedQuestion = applicationQuestionRepository.findById(
+                savedQuestion.getId()).orElse(null);
+        assertThat(updatedQuestion).isNotNull();
+    }
+
 }
