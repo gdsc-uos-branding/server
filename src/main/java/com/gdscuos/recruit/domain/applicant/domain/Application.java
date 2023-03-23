@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -52,4 +53,15 @@ public class Application {
 
     @Column(name = "is_apply_core", nullable = false)
     private Boolean isApplyCore;
+
+    @Builder
+    public Application(User user, List<ApplicationQuestion> applicationQuestions, Team team,
+            Season season, Status status, Boolean isApplyCore) {
+        this.user = user;
+        this.applicationQuestions = applicationQuestions;
+        this.team = team;
+        this.season = season;
+        this.status = status;
+        this.isApplyCore = isApplyCore;
+    }
 }

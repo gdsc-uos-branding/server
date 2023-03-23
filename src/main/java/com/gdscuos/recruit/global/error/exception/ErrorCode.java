@@ -14,9 +14,9 @@ public enum ErrorCode {
     INVALID_TYPE_VALUE("C05", " Invalid Type Value.", HttpStatus.BAD_REQUEST.value()),
 
     // User
-    USER_ACCESS_DENIED("A01", "User Access is Denied.", HttpStatus.UNAUTHORIZED.value()),
-    USER_NOT_FOUND("A02", "User is not Found.", HttpStatus.BAD_REQUEST.value()),
-    EMAIL_DUPLICATION("A03", "Email is Duplicated.", HttpStatus.BAD_REQUEST.value()),
+    USER_ACCESS_DENIED("U01", "User Access is Denied.", HttpStatus.UNAUTHORIZED.value()),
+    USER_NOT_FOUND("U02", "User is not Found.", HttpStatus.BAD_REQUEST.value()),
+    EMAIL_DUPLICATION("U03", "User Email is Duplicated.", HttpStatus.BAD_REQUEST.value()),
 
     // User - Token
     ACCESS_TOKEN_EXPIRED("AT01", "Access Token is Expired", HttpStatus.UNAUTHORIZED.value()),
@@ -26,6 +26,14 @@ public enum ErrorCode {
     REFRESH_TOKEN_NOT_FOUND("AT04", "Refreshed Token is not Found.",
             HttpStatus.UNAUTHORIZED.value()),
     REFRESH_TOKEN_EXPIRED("AT05", "Refreshed Token is Expired.", HttpStatus.UNAUTHORIZED.value()),
+
+    // Introduction
+    INTRODUCTION_NOT_FOUND("I01", "Introduction is not Found.", HttpStatus.BAD_REQUEST.value()),
+
+    // Application
+    APPLICATION_QUESTION_NOT_FOUND("A01", "Application Question is not Found.",
+            HttpStatus.BAD_REQUEST.value()),
+    APPLICATION_NOT_FOUND("A02", "Application is not Found.", HttpStatus.BAD_REQUEST.value()),
 
     // External API
     EXTERNAL_API_FAILED("E01", "External API Request is failed.",
