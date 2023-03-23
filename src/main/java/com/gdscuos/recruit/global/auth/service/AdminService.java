@@ -1,5 +1,6 @@
 package com.gdscuos.recruit.global.auth.service;
 
+import com.gdscuos.recruit.domain.applicant.exception.IntroductionNotFoundException;
 import com.gdscuos.recruit.global.auth.domain.Introduction;
 import com.gdscuos.recruit.global.auth.dto.UpdateIntroAboutDTO;
 import com.gdscuos.recruit.global.auth.dto.UpdateIntroActivityDTO;
@@ -75,7 +76,7 @@ public class AdminService {
             if (intro != null) {
                 intro.setAbout(updateIntroAboutDTO.getAbout());
             } else {
-                // TODO: 인우님 코드 머지 이후, throw new IntroductionNotFoundException();
+                throw new IntroductionNotFoundException();
             }
         }
     }
@@ -87,7 +88,7 @@ public class AdminService {
             if (intro != null) {
                 intro.setAbout(updateIntroActivityDTO.getActivity());
             } else {
-                // TODO: 인우님 코드 머지 이후, throw new IntroductionNotFoundException();
+                throw new IntroductionNotFoundException();
             }
         }
     }
@@ -99,7 +100,7 @@ public class AdminService {
             if (intro != null) {
                 intro.setAbout(updateIntroTargetDTO.getTarget());
             } else {
-                // TODO: 인우님 코드 머지 이후, throw new IntroductionNotFoundException();
+                throw new IntroductionNotFoundException();
             }
         }
     }
