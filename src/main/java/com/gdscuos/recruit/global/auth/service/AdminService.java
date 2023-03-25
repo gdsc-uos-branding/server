@@ -1,12 +1,12 @@
 package com.gdscuos.recruit.global.auth.service;
 
+import com.gdscuos.recruit.domain.applicant.domain.Introduction;
 import com.gdscuos.recruit.domain.applicant.exception.IntroductionNotFoundException;
-import com.gdscuos.recruit.global.auth.domain.Introduction;
+import com.gdscuos.recruit.domain.applicant.repository.IntroductionRepository;
 import com.gdscuos.recruit.global.auth.dto.UpdateIntroAboutDTO;
 import com.gdscuos.recruit.global.auth.dto.UpdateIntroActivityDTO;
 import com.gdscuos.recruit.global.auth.dto.UpdateIntroTargetDTO;
 import com.gdscuos.recruit.global.auth.dto.UserDTO;
-import com.gdscuos.recruit.global.auth.repository.IntroductionRepository;
 import com.gdscuos.recruit.global.auth.repository.UserRepository;
 import com.gdscuos.recruit.global.common.Role;
 import com.gdscuos.recruit.global.common.User;
@@ -72,7 +72,7 @@ public class AdminService {
     // 특정 팀의 소개 수정
     public void changeTeamAbout(HttpServletRequest request, UpdateIntroAboutDTO updateIntroAboutDTO) {
         if (isUserRoleLead(getLoginUser(request))) {
-            Introduction intro = introductionRepository.findIntroductionByTeam(updateIntroAboutDTO.getTeam());
+            Introduction intro = introductionRepository.findByTeam(updateIntroAboutDTO.getTeam());
             if (intro != null) {
                 intro.setAbout(updateIntroAboutDTO.getAbout());
             } else {
@@ -84,9 +84,9 @@ public class AdminService {
     //  특정 팀의 활동 내용 수정
     public void changeTeamActivity(HttpServletRequest request, UpdateIntroActivityDTO updateIntroActivityDTO) {
         if (isUserRoleLead(getLoginUser(request))) {
-            Introduction intro = introductionRepository.findIntroductionByTeam(updateIntroActivityDTO.getTeam());
+            Introduction intro = introductionRepository.findByTeam(updateIntroActivityDTO.getTeam());
             if (intro != null) {
-                intro.setAbout(updateIntroActivityDTO.getActivity());
+                intro.setActivity(updateIntroActivityDTO.getActivity());
             } else {
                 throw new IntroductionNotFoundException();
             }
@@ -96,9 +96,9 @@ public class AdminService {
     // 특정 팀의 인재상 수정
     public void changeTeamTarget(HttpServletRequest request, UpdateIntroTargetDTO updateIntroTargetDTO) {
         if (isUserRoleLead(getLoginUser(request))) {
-            Introduction intro = introductionRepository.findIntroductionByTeam(updateIntroTargetDTO.getTeam());
+            Introduction intro = introductionRepository.findByTeam(updateIntroTargetDTO.getTeam());
             if (intro != null) {
-                intro.setAbout(updateIntroTargetDTO.getTarget());
+                intro.setTarget(updateIntroTargetDTO.getTarget());
             } else {
                 throw new IntroductionNotFoundException();
             }
