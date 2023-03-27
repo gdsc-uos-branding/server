@@ -13,16 +13,16 @@ import java.util.List;
 @ConfigurationProperties(prefix = "login")
 public class WebConfig implements WebMvcConfigurer {
 
-    private List<String> whiteListURLs = new ArrayList<>();
+    private List<String> blackListURLs = new ArrayList<>();
 
-    public void setWhiteListURLs(List<String> whiteListURLs) {
-        this.whiteListURLs = whiteListURLs;
+    public void setBlackListURLs(List<String> blackListURLs) {
+        this.blackListURLs = blackListURLs;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginCheckInterceptor())
-                .addPathPatterns(whiteListURLs.toArray(new String[0]))
+                .addPathPatterns(blackListURLs.toArray(new String[0]))
                 .order(1);
     }
 }
