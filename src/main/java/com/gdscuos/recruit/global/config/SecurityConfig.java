@@ -5,7 +5,6 @@ import com.gdscuos.recruit.global.auth.service.AuthService;
 import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,15 +16,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
-@ConfigurationProperties(prefix = "security")
 public class SecurityConfig {
 
     private final AuthService authService;
-    private final List<String> whiteListURLs;
 
-    public SecurityConfig(AuthService authService, List<String> whiteListURLs) {
+    public SecurityConfig(AuthService authService) {
         this.authService = authService;
-        this.whiteListURLs = whiteListURLs;
     }
 
     @Bean
@@ -56,7 +52,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(whiteListURLs);
+        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("http://localhost:5173");
+        configuration.addAllowedOrigin("https://admin-gdsc-uos.vercel.app/");
+        configuration.addAllowedOrigin("https://recruit-gdsc-uos.vercel.app/");
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
