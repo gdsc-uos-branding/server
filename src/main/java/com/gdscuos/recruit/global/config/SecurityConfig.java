@@ -52,10 +52,10 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedOrigin("http://localhost:5173");
-        configuration.addAllowedOrigin("https://admin-gdsc-uos.vercel.app/");
-        configuration.addAllowedOrigin("https://recruit-gdsc-uos.vercel.app/");
+        configuration.addAllowedOrigin("http://localhost:3000/**");
+        configuration.addAllowedOrigin("http://localhost:5173/**");
+        configuration.addAllowedOrigin("https://admin-gdsc-uos.vercel.app/**");
+        configuration.addAllowedOrigin("https://recruit-gdsc-uos.vercel.app/**");
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
