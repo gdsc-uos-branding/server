@@ -1,10 +1,6 @@
 package com.gdscuos.recruit.global.config;
 
 import com.gdscuos.recruit.global.auth.service.AuthService;
-
-import java.util.Arrays;
-import java.util.List;
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +9,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -27,6 +27,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
+
+        http.authorizeRequests()
+                .antMatchers("/**").permitAll()
+                .and()
+                .cors();
 
         http.authorizeRequests()
                 .antMatchers("/**")
@@ -44,8 +49,7 @@ public class SecurityConfig {
                 .oauth2Login()
                 .defaultSuccessUrl("/api/home")
                 .userInfoEndpoint() //userInfoEndpoint()은 로그인 성공 후 사용자 정보를 가져올 때의 설정을 담당
-                .userService(
-                        authService); // userService()은 소셜 로그인 성공 시 후속 조치를 진행할 UserService 인터페이스의 구현체를 등록
+                .userService(authService); // userService()은 소셜 로그인 성공 시 후속 조치를 진행할 UserService 인터페이스의 구현체를 등록
         return http.build();
     }
 
@@ -59,6 +63,8 @@ public class SecurityConfig {
         configuration.addAllowedOrigin("https://recruit-gdsc-uos.vercel.app/**");
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
