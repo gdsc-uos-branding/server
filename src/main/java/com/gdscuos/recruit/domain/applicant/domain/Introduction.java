@@ -12,9 +12,11 @@ import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "introduction")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Introduction {
